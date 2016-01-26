@@ -25,11 +25,11 @@ function getOpenWindow(window) {
   }
 }
 
-function Window({ window }) {
+function Window({ window, dispatch }) {
   const windowComponent = window.opened ?
     getOpenWindow(window) :
     <ClosedWindow
-      onClick={ () => {} }
+      onClick={ () => dispatch(AppActions.openWindow(window.day)) }
       text={ window.day } />;
 
   return (
@@ -44,4 +44,4 @@ Window.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-export default Window;
+export default connect()(Window);

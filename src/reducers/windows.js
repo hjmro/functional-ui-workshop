@@ -1,18 +1,6 @@
-import { AppActions } from '../actions';
+import { AppActions, ApiActions } from '../actions';
 
 const defaultState = [
-  { day: 1, content: 'Yo!', type: 'text', opened: false },
-  { day: 2, content: 'https://i.imgur.com/QAyXWuC.gif', type: 'image', opened: false },
-  { day: 3, content: 'Du er flink', type: 'text', opened: false },
-  { day: 4, content: 'http://tummax.com/wp-content/uploads/2015/05/wow.png', type: 'image', opened: false },
-  { day: 5, content: 'http://deaddarlings.com/wp-content/uploads/2015/01/POW-Weddings.jpg', type: 'image', opened: false },
-  { day: 6, content: 'J1Z8SQ1OUa0', type: 'youtube', opened: false },
-  { day: 7, content: 'spotify:track:2TpxZ7JUBn3uw46aR7qd6V', type: 'spotify', opened: false },
-  { day: 8, content: 'Redux <3', type: 'text', opened: false },
-  { day: 9, content: '8f3RkpTnS7I', type: 'youtube', opened: false },
-  { day: 10, content: 'http://bartjs.io/', type: 'text', opened: false },
-  { day: 11, content: 'spotify:track:25Zf9BskLFn1vDDypPXkuF', type: 'spotify', opened: false },
-  { day: 12, content: 'spotify:track:1sdjNMLfOmKh3XICWEHh62', type: 'spotify', opened: false }
 ];
 
 export default function(state = defaultState, action = {}) {
@@ -22,6 +10,18 @@ export default function(state = defaultState, action = {}) {
       ...state,
       action.window
     ];
+  case AppActions.WINDOW_OPEN_ALL:
+ 	return state.map(state => Object.assign({}, state, { opened: true }));  
+  case AppActions.WINDOW_CLOSE_ALL:
+ 	return state.map(state => Object.assign({}, state, { opened: false }));  
+  case ApiActions.WINDOWS_FETCH:
+  	if(!action.data) return state;
+  	return action.data;
+  case AppActions.WINDOW_OPEN_ONE:
+    return state.map(window => {
+		if(window.day == action.day) return Object.assign({}, window, {opened:true})
+		return window;
+	})
   default:
     return state;
   }

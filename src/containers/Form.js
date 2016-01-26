@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { AppActions } from '../actions';
+import { AppActions, ApiActions } from '../actions';
 import { range } from '../utils';
 import {
   isValidText,
@@ -9,6 +9,12 @@ import {
   isValidYouTubeUrl
 } from '../utils/validation';
 import { windowTypes } from '../constants';
+import RadioSelector from '../components/RadioSelector';
+import DropdownSelector from '../components/DropdownSelector';
+import TextInput from '../components/TextInput';
+
+
+
 
 function validate({ text, type }) {
   switch (type) {
@@ -43,7 +49,8 @@ class Form extends React.Component {
       const { type } = this.state;
       this.setState({ text, validationError: validate({ text, type }) });
     };
-    const handleDayChange = day => this.setState({ day });
+	
+    const handleDayChange = day => this.setState({ day: parseInt(day) });
 
     const handleSubmit = e => {
       e.preventDefault();
@@ -53,7 +60,7 @@ class Form extends React.Component {
         type: this.state.type,
         opened: false,
       };
-      dispatch(AppActions.createWindow(window));
+      dispatch(ApiActions.createWindow(window));
       this.setState(initialState);
     };
 
@@ -65,53 +72,25 @@ class Form extends React.Component {
       windowTypes.YOUTUBE,
     ];
 
-    const radios = types.map(type => {
-      const id = `windowtype${type}`;
-      return (
-        <li key={ type }>
-          <input
-            type="radio"
-            name="type"
-            id={ id }
-            label={ type }
-            checkedLink={{
-              value: this.state.type === type,
-              requestChange: () => handleTypeChange(type)
-            }} />
-          <label htmlFor={ id }>{ type }</label>
-        </li>
-      );
-    });
+
     const dayOptions = validDays
       .map(day => <option key={ `dayOption${day}` } label={ day } value={ day } />);
 
     return (
       <form>
         <h3>New Window</h3>
-        <ul>{ radios }</ul>
-        <div>
-          <label htmlFor="daySelect">Day</label>
-          <select
-            name="day"
-            id="daySelect"
-            valueLink={{
-              value: this.state.day,
-              requestChange: day => handleDayChange(parseInt(day))
-            }}
-            defaultValue="none">
-            <option label="Choose day" value="none" disabled />
-            { dayOptions }
-          </select>
-        </div>
-        <div>
-          <input
-            type="text"
-            valueLink={{
-              value: this.state.text,
-              requestChange: handleTextChange
-            }} />
-          <div>{ this.state.validationError }</div>
-        </div>
+		<RadioSelector 
+			options={types} 
+			selectedOption={this.state.type} 
+			handleSelect={handleTypeChange} />
+		<DropdownSelector 
+			options={dayOptions} 
+			selectedOption={this.state.day} 
+			handleSelect={handleDayChange} />
+		<TextInput 
+			currentValue={this.state.text} 
+			onValueChange={handleTextChange} 
+			validationError={this.state.validationError} />
         <button type="submit" onClick={ handleSubmit } disabled={ !canSubmit }> Save</button>
       </form>
     );

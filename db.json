@@ -72,6 +72,20 @@
       "content": "spotify:track:1sdjNMLfOmKh3XICWEHh62",
       "type": "spotify",
       "opened": false
+    },
+    {
+      "day": 16,
+      "content": "dfdfdfd",
+      "type": "text",
+      "opened": false,
+      "id": "727a7302-7b92-496d-9fad-1102dd457650"
+    },
+    {
+      "day": 13,
+      "content": "fdfdfdfd",
+      "type": "text",
+      "opened": false,
+      "id": "4b283671-1789-4457-bed3-c969de2726e5"
     }
   ]
 }
